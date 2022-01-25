@@ -16,15 +16,15 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
 };
 import { getAttribute, listAttributes, setAttribute, removeAttribute } from 'fs-xattr';
 const DEFAULT_PREFIX = 'user';
-function setExtendedAttributes(filePath, xattrs, prefix = DEFAULT_PREFIX) {
+function setExtendedAttributes(filePath, xattrsToSet, prefix = DEFAULT_PREFIX) {
     return __awaiter(this, void 0, void 0, function* () {
         prefix && (prefix = prefix + '.'); // add dot if prefix is recieved
-        for (const [xattrName, value] of Object.entries(xattrs)) {
+        for (const [xattrName, value] of Object.entries(xattrsToSet)) {
             yield setAttribute(filePath, prefix + xattrName, value);
         }
     });
 }
-function getExtendedAttributes(filePath, prefix) {
+function getExtendedAttributes(filePath, xattrsToGet, prefix) {
     var e_1, _a;
     return __awaiter(this, void 0, void 0, function* () {
         let filtered = {};
@@ -34,6 +34,9 @@ function getExtendedAttributes(filePath, prefix) {
                 const unprefixedXattr = unprefix(xattrOnFile, prefix);
                 // ignore file xattrs missing prefix
                 if (!unprefixedXattr)
+                    return;
+                // when filtering param is recieved but does not contain current xattr, ignore
+                if (xattrsToGet !== undefined && !xattrsToGet.includes(unprefixedXattr))
                     return;
                 filtered[unprefixedXattr] = (yield getAttribute(filePath, xattrOnFile)).toString('utf8');
             }
@@ -76,99 +79,4 @@ const unprefix = (xattrName, prefix = DEFAULT_PREFIX) => {
         return; // ignore file xattrs missing the prefix
     return xattrName.slice(prefix.length);
 };
-import { iterateOnFilePaths } from 'fs-custom-tools';
-import fs from 'fs';
-/** for dev purposes */
-const NODES_ROOT_DIR = './playground_dir';
-const NODE_RECORD_ATTRIBUTES = ['uuid', 'created', 'knownLocation'];
-/** for dev purposes */
-const knownNodeRecords = [
-    {
-        uuid: '43085948',
-        created: 'created',
-        knownLocation: 'node_01.txt',
-    },
-    {
-        uuid: '55369411',
-        created: 'created',
-        knownLocation: 'node_02.txt',
-    },
-    {
-        uuid: '95837745',
-        created: 'created',
-        knownLocation: 'subfolder/subnode_01.txt',
-    },
-    {
-        uuid: '38855012',
-        created: 'created',
-        knownLocation: 'subfolder/subsubfolder/subsubnode_01.txt',
-    },
-];
-function stampKnownNodes(nodeRecords) {
-    return __awaiter(this, void 0, void 0, function* () {
-        for (const nodeRecord of nodeRecords) {
-            yield stampNodeFile(nodeRecord);
-        }
-    });
-}
-function stampNodeFile(nodeRecord) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const path = NODES_ROOT_DIR + '/' + nodeRecord.knownLocation;
-        // if path exists and is writable
-        fs.access(path, fs.constants.R_OK | fs.constants.W_OK, (error) => __awaiter(this, void 0, void 0, function* () {
-            if (error)
-                return; // TODO better error handling
-            yield setExtendedAttributes(path, nodeRecord);
-        }));
-    });
-}
-function unstampNodeFile(path) {
-    return __awaiter(this, void 0, void 0, function* () {
-        yield removeExtendedAttributes(path, NODE_RECORD_ATTRIBUTES);
-    });
-}
-function unstampAllInDir(path) {
-    var e_3, _a;
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            for (var _b = __asyncValues(iterateOnFilePaths(path)), _c; _c = yield _b.next(), !_c.done;) {
-                const filePath = _c.value;
-                yield unstampNodeFile(filePath);
-            }
-        }
-        catch (e_3_1) { e_3 = { error: e_3_1 }; }
-        finally {
-            try {
-                if (_c && !_c.done && (_a = _b.return)) yield _a.call(_b);
-            }
-            finally { if (e_3) throw e_3.error; }
-        }
-    });
-}
-function listStampsInDir(path) {
-    var e_4, _a;
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            for (var _b = __asyncValues(iterateOnFilePaths(path)), _c; _c = yield _b.next(), !_c.done;) {
-                const filePath = _c.value;
-                console.log(`${filePath} : `, yield getExtendedAttributes(filePath));
-            }
-        }
-        catch (e_4_1) { e_4 = { error: e_4_1 }; }
-        finally {
-            try {
-                if (_c && !_c.done && (_a = _b.return)) yield _a.call(_b);
-            }
-            finally { if (e_4) throw e_4.error; }
-        }
-    });
-}
-function doIt() {
-    return __awaiter(this, void 0, void 0, function* () {
-        yield stampKnownNodes(knownNodeRecords);
-        // await unstampAllInDir(NODES_ROOT_DIR)
-        yield listStampsInDir(NODES_ROOT_DIR);
-    });
-}
-doIt();
 export { getExtendedAttributes, setExtendedAttributes, removeExtendedAttributes, };
