@@ -1,0 +1,16 @@
+{
+	"compilerOptions": {
+		"esModuleInterop": true,
+		"module": "ES2020",
+		"moduleResolution": "node",
+		"target": "es2015",
+		"declaration": true,
+		"outDir": "./dist"
+	},
+	"include": [
+		"src/**/*",
+	],
+	"exclude": [
+		"**/*.test.ts"
+	]
+}

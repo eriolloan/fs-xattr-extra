@@ -1,0 +1,3 @@
+xattrsToGet argument for getExtendedAttributes
+write jest tests
+errors handling
