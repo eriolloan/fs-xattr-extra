@@ -97,7 +97,7 @@ When no corresponding attributes are found, the function returns an empty object
 ### usage
 `await removeExtendedAttributes(filePath: string [, xattrsToRemove: Array<string>, prefix: string = 'user'])`
 
-**Note:** Performs some checks on file existing and being readable, but does not currently handle exceptions.
+**Note:** does not currently handle exceptions.
 
 |  parameter 	| type | details |
 |---|---|---------|
