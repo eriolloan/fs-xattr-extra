@@ -1,16 +1,23 @@
 {
 	"compilerOptions": {
-		"esModuleInterop": true,
+		"rootDir": "src",
+		"outDir": "dist",
+		"target": "ES2020",
+		"lib": [
+			"ES2020"
+		],
 		"module": "ES2020",
-		"moduleResolution": "node",
-		"target": "es2015",
+		"moduleResolution": "Node",
+		"strict": true,
 		"declaration": true,
-		"outDir": "./dist"
+		"sourceMap": true,
+		"allowSyntheticDefaultImports": true,
+		"skipLibCheck": true
 	},
 	"include": [
 		"src/**/*",
 	],
 	"exclude": [
-		"**/*.test.ts"
+		"**/*.test.ts",
 	]
 }

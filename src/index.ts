@@ -21,7 +21,7 @@ async function getExtendedAttributes(
 	xattrsToGet?: Readonly<Array<string>> | Array<string>,
 	prefix?: string) {
 
-	let filtered = {}
+	let filtered = {} as Record<string, any>
 
 	for await (const xattrOnFile of await listAttributes(filePath)) {
 		const unprefixedXattr = unprefix(xattrOnFile, prefix)
@@ -47,7 +47,7 @@ async function removeExtendedAttributes(
 		const unprefixedXattr = unprefix(xattrOnFile, prefix)
 
 		// ignore file xattrs missing the prefix
-		if (!xattrsToRemove.includes(unprefixedXattr)) return
+		if (unprefixedXattr && !xattrsToRemove.includes(unprefixedXattr)) return
 
 		await removeAttribute(filePath, xattrOnFile)
 	}
