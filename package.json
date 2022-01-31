@@ -20,7 +20,7 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsc && node --experimental-specifier-resolution=node ./dist/index.js",
-    "test": "jest --coverage"
+    "test": "jest --passWithNoTests --coverage"
   },
   "keywords": [],
   "author": "Adrien Facelina",
