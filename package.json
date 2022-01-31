@@ -4,10 +4,11 @@
   "version": "1.0.0",
   "description": "extra tools for fs-xattr",
   "main": "./dist/index.js",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
   "exports": {
-    "main": "./dist"
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/types/index.d.ts"
+    }
   },
   "files": [
     "/src",
