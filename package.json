@@ -20,7 +20,7 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsc && node --experimental-specifier-resolution=node ./dist/index.js",
-    "test": "jest --passWithNoTests --coverage"
+    "test": "jest --passWithNoTests --verbose --coverage"
   },
   "keywords": [],
   "author": "Adrien Facelina",
@@ -37,11 +37,21 @@
     "fs-xattr": "^0.4.0"
   },
   "jest": {
-    "preset": "ts-jest",
-    "testEnvironment": "node",
-    "verbose": true,
-    "roots": [
-      "src"
+    "preset": "ts-jest/presets/js-with-ts-esm",
+    "globals": {
+      "ts-jest": {
+        "useESM": true
+      }
+    },
+    "extensionsToTreatAsEsm": [
+      ".ts"
+    ],
+    "transform": {},
+    "moduleNameMapper": {
+      "^(\\.{1,2}/.*)\\.js$": "$1"
+    },
+    "transformIgnorePatterns": [
+      "/node_modules/"
     ]
   }
 }
