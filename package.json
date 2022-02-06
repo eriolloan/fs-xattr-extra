@@ -2,7 +2,7 @@
   "name": "fs-xattr-extra",
   "type": "module",
   "version": "1.0.1",
-  "description": "extra tools for fs-xattr",
+  "description": "Extra tools for manipulating file extended attributes",
   "main": "./dist/index.js",
   "exports": {
     ".": "./dist/index.js"
